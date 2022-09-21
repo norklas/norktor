@@ -24,7 +24,6 @@ module.exports.buildKeepAlive = () => Buffer.alloc(4);
 
 module.exports.buildChoke = () => {
   const buf = Buffer.alloc(5);
-
   // length
   buf.writeUInt32BE(1, 0);
   // id
@@ -34,7 +33,6 @@ module.exports.buildChoke = () => {
 
 module.exports.buildUnchoke = () => {
   const buf = Buffer.alloc(5);
-
   // length
   buf.writeUInt32BE(1, 0);
   // id
@@ -44,7 +42,6 @@ module.exports.buildUnchoke = () => {
 
 module.exports.buildInterested = () => {
   const buf = Buffer.alloc(5);
-
   // length
   buf.writeUInt32BE(1, 0);
   // id
@@ -54,7 +51,6 @@ module.exports.buildInterested = () => {
 
 module.exports.buildUninterested = () => {
   const buf = Buffer.alloc(5);
-
   // length
   buf.writeUInt32BE(1, 0);
   // id
@@ -64,7 +60,6 @@ module.exports.buildUninterested = () => {
 
 module.exports.buildHave = (payload) => {
   const buf = Buffer.alloc(9);
-
   // length
   buf.writeUInt32BE(5, 0);
   // id
@@ -76,7 +71,6 @@ module.exports.buildHave = (payload) => {
 
 module.exports.buildBitfield = (bitfield) => {
   const buf = Buffer.alloc(14);
-
   // length
   buf.writeUInt32BE(payload.length + 1, 0);
   // id
@@ -88,7 +82,6 @@ module.exports.buildBitfield = (bitfield) => {
 
 module.exports.buildRequest = (payload) => {
   const buf = Buffer.alloc(17);
-
   // length
   buf.writeUInt32BE(13, 0);
   // id
