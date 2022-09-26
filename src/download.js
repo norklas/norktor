@@ -3,13 +3,12 @@
 const net = require("net");
 const tracker = require("./tracker");
 const message = require("./message");
-// 1
 const Pieces = require("./Pieces");
+const Queue = require("./Queue");
 
 module.exports = (torrent) => {
   tracker.getPeers(torrent, (peers) => {
-    // 1
-    const pieces = new Pieces(torrent.info.pieces.length / 20);
+    const pieces = new Pieces(torrent);
     peers.forEach((peer) => download(peer, torrent, pieces));
   });
 };
@@ -22,7 +21,7 @@ function download(peer, torrent, pieces) {
     socket.write(message.buildHandshake(torrent));
   });
   // 1
-  const queue = { choked: true, queue: [] };
+  const queue = new Queue(torrent);
   onWholeMsg(socket, (msg) => msgHandler(msg, socket, pieces, queue));
 }
 
@@ -95,12 +94,11 @@ function requestPiece(socket, pieces, queue) {
   //2
   if (queue.choked) return null;
 
-  while (queue.queue.length) {
-    const pieceIndex = queue.shift();
-    if (pieces.needed(pieceIndex)) {
-      // need to fix this
-      socket.write(message.buildRequest(pieceIndex));
-      pieces.addRequested(pieceIndex);
+  while (queue.length()) {
+    const pieceBlock = queue.deque();
+    if (pieces.needed(pieceBlock)) {
+      socket.write(message.buildRequest(pieceBlock));
+      pieces.addRequested(pieceBlock);
       break;
     }
   }
